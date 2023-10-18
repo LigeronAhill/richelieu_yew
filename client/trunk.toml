@@ -1,5 +1,5 @@
 [serve]
 address = "127.0.0.1"
 port = 8080
+no_auto_reload = false
 open = true
-no_autoreload = false
