@@ -1,12 +1,14 @@
 use axum::http::StatusCode;
 use axum::response::{IntoResponse, Response};
 use serde::Serialize;
+
 pub type Result<T> = core::result::Result<T, Error>;
 
 #[derive(Clone, Debug, Serialize, strum_macros::AsRefStr)]
 #[serde(tag = "type", content = "data")]
 pub enum Error {
     LoginFail,
+
     // -- Auth errors.
     AuthFailNoAuthTokenCookie,
     AuthFailTokenWrongFormat,
@@ -16,27 +18,29 @@ pub enum Error {
     ProductDeleteFailIdNotFound { id: u64 },
 }
 
-// region: --- Error boilerplate
-impl std::fmt::Display for Error {
+// region:    --- Error Boilerplate
+impl core::fmt::Display for Error {
     fn fmt(
         &self,
-        fmt: &mut std::fmt::Formatter
-    ) -> core::result::Result<(), std::fmt::Error> {
+        fmt: &mut core::fmt::Formatter,
+    ) -> core::result::Result<(), core::fmt::Error> {
         write!(fmt, "{self:?}")
     }
 }
 
 impl std::error::Error for Error {}
-// endregion: --- Error boilerplate
+// endregion: --- Error Boilerplate
 
 impl IntoResponse for Error {
     fn into_response(self) -> Response {
-        // TODO: maybe dbg! --?
-        println!("->> {:<12} - {self:?}", "INTO_RESPONSE");
-        // Create a placeholder Axum response.
+        println!("->> {:<12} - {self:?}", "INTO_RES");
+
+        // Create a placeholder Axum reponse.
         let mut response = StatusCode::INTERNAL_SERVER_ERROR.into_response();
-        // Insert the Error into the response.
+
+        // Insert the Error into the reponse.
         response.extensions_mut().insert(self);
+
         response
     }
 }
