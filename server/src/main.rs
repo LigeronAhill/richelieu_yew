@@ -11,6 +11,7 @@ mod routes;
 mod model;
 mod storage;
 mod ctx;
+mod log;
 
 #[tokio::main]
 async fn main() -> Result<()> {
