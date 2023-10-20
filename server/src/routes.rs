@@ -6,7 +6,7 @@ use crate::model::api_login;
 pub mod products;
 pub mod mw_auth;
 pub async fn main_response_mapper(res: Response) -> Response {
-    println!("->> {:<12} - {res:#?} main_response_mapper", "RESPONSE_MAPPER");
+    println!("->> {:<12} - main_response_mapper", "RESPONSE_MAPPER");
     println!();
     res
 }

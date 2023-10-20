@@ -10,6 +10,7 @@ mod error;
 mod routes;
 mod model;
 mod storage;
+mod ctx;
 
 #[tokio::main]
 async fn main() -> Result<()> {
@@ -23,6 +24,10 @@ async fn main() -> Result<()> {
         .merge(routes::login())
         .nest("/api", routes_api)
         .layer(middleware::map_response(main_response_mapper))
+        .layer(middleware::from_fn_with_state(
+            mc.clone(),
+            routes::mw_auth::mw_ctx_resolver,
+        ))
         .layer(CookieManagerLayer::new())
         .fallback_service(routes::nest());
     // endregion: ---Routes

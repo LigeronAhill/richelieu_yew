@@ -16,6 +16,7 @@ pub enum Error {
 
     // -- Model errors.
     ProductDeleteFailIdNotFound { id: u64 },
+    CreateProductFail,
 }
 
 // region:    --- Error Boilerplate

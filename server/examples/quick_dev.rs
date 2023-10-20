@@ -21,7 +21,7 @@ async fn main() -> Result<()> {
     let req_create_product = hc.do_post(
          "/api/products",
          json!({
-	 		"name": "Product from Rust - 3"
+	 		"name": "Product from Rust - 2"
 	 	}),
      );
     req_create_product.await?.print().await?;

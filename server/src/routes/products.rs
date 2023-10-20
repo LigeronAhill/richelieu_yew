@@ -2,8 +2,8 @@ use axum::extract::{FromRef, Path, State};
 use axum::{Json, Router};
 use axum::response::IntoResponse;
 use axum::routing::{delete, get, post};
-use serde_json::json;
 use surrealdb::sql::Id;
+use crate::ctx::Ctx;
 use crate::model::product::ProductForCreate;
 use crate::storage::ModelController;
 
@@ -15,10 +15,11 @@ struct AppState {
 
 async fn create_product(
     State(state): State<AppState>,
+    ctx: Ctx,
     Json(product): Json<ProductForCreate>,
 ) -> impl IntoResponse {
     println!("->> {:<12} - create_product", "HANDLER");
-    let product = state.mc.create_product(product).await;
+    let product = state.mc.create_product(ctx, product).await;
     match product {
         Ok(product) => Json(product).into_response(),
         Err(_) => {
@@ -29,9 +30,10 @@ async fn create_product(
 
 async fn list_products(
     State(state): State<AppState>,
+    ctx: Ctx,
 ) -> impl IntoResponse {
     println!("->> {:<12} - list_products", "HANDLER");
-    let products = state.mc.list_products().await;
+    let products = state.mc.list_products(ctx).await;
     match products {
         Ok(products) => Json(products).into_response(),
         Err(_) => {
@@ -42,10 +44,11 @@ async fn list_products(
 
 async fn delete_product(
     State(state): State<AppState>,
+    ctx: Ctx,
     Path(id): Path<Id>,
 ) -> impl IntoResponse {
     println!("->> {:<12} - delete_product", "HANDLER");
-    let product = state.mc.delete_product(id).await;
+    let product = state.mc.delete_product(ctx, id).await;
     match product {
         Ok(product) => Json(product).into_response(),
         Err(_) => {
